@@ -9,13 +9,17 @@ import {
     Param,
     Post,
     Body,
+    ParseIntPipe,
 } from '@nestjs/common';
+import { PizzasService } from 'src/services/pizzas/pizzas.service';
+import { CreatePizzaDto, UpdatePizzaDto } from 'src/dtos/pizzas.dto';
 
 @Controller('pizzas')
 export class PizzasController {
+    constructor(private pizzasService: PizzasService) { }
     @Get(':pizzaId')
-    getPizza(@Param('pizzaId') pizzaId: string) {
-        return ` pizza ${pizzaId}`;
+    getPizza(@Param('pizzaId', ParseIntPipe) pizzaId: number) {
+        return this.pizzasService.findOne(pizzaId);
     }
 
     @Get()
@@ -24,32 +28,24 @@ export class PizzasController {
         @Query('offset') offset: number = 0,
         @Query('brand') brand: string,
     ) {
-        return {
-            message: `pizzas: limit => ${limit} offset => ${offset} our  brand is ${brand}`,
-        };
+        return this.pizzasService.findAll();
+
     }
 
     @Post()
     @HttpCode(HttpStatus.ACCEPTED)
-    create(@Body() payload: any) {
-        return {
-            message: 'Created',
-            payload,
-        };
+    create(@Body() payload: CreatePizzaDto) {
+        return this.pizzasService.create(payload);
+
     }
     @Put(':pizzaId')
-    update(@Param('pizzaId') pizzaId: number, @Body() payload: any) {
-        return {
-            message: 'updated',
-            pizzaId: pizzaId,
-            payload,
-        };
+    update(@Param('pizzaId', ParseIntPipe) pizzaId: number, @Body() payload: UpdatePizzaDto) {
+        return this.pizzasService.update(pizzaId, payload);
+
     }
     @Delete(':pizzaId')
-    delete(@Param('pizzaId') pizzaId: number) {
-        return {
-            message: ' Deleted',
-            pizzaId: pizzaId,
-        };
+    delete(@Param('pizzaId', ParseIntPipe) pizzaId: number) {
+        return this.pizzasService.delete(pizzaId);
+
     }
 }
