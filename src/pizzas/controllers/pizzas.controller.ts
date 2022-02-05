@@ -11,8 +11,8 @@ import {
     Body,
     ParseIntPipe,
 } from '@nestjs/common';
-import { PizzasService } from 'src/services/pizzas/pizzas.service';
-import { CreatePizzaDto, UpdatePizzaDto } from 'src/dtos/pizzas.dto';
+import { PizzasService } from 'src/pizzas/services/pizzas.service';
+import { CreatePizzaDto, UpdatePizzaDto } from 'src/pizzas/dtos/pizzas.dto';
 
 @Controller('pizzas')
 export class PizzasController {

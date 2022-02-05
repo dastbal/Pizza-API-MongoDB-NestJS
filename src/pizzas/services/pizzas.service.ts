@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { Pizza } from '../../entities/pizza.entity';
-import { CreatePizzaDto, UpdatePizzaDto } from 'src/dtos/pizzas.dto';
+import { Pizza } from '../entities/pizza.entity';
+import { CreatePizzaDto, UpdatePizzaDto } from 'src/pizzas/dtos/pizzas.dto';
 
 @Injectable()
 export class PizzasService {

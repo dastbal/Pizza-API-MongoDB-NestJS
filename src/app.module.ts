@@ -1,14 +1,33 @@
 import { Module } from '@nestjs/common';
+import { ConfigModule } from '@nestjs/config';
+import * as Joi from 'joi';
+
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { PizzasController } from './controllers/pizzas/pizzas.controller';
-import { CategoriesController } from './controllers/categories/categories.controller';
-import { UsersController } from './controllers/users/users.controller';
-import { PizzasService } from './services/pizzas/pizzas.service';
+import { UsersModule } from './users/users.module';
+import { PizzasModule } from './pizzas/pizzas.module';
+import { DatabseModule } from './databse/databse.module';
+import { enviroments } from './enviroments';
+import config from './config';
+
 
 @Module({
-  imports: [],
-  controllers: [AppController, PizzasController, CategoriesController, UsersController],
-  providers: [AppService, PizzasService],
+  imports: [
+    UsersModule,
+    PizzasModule,
+    DatabseModule,
+    ConfigModule.forRoot({
+      envFilePath: enviroments[process.env.NODE_ENV] || '.prod.env',
+      load: [config],
+      isGlobal: true,
+      validationSchema: Joi.object({
+        API_KEY: Joi.number().required(),
+        DATABASE_NAME: Joi.string().required(),
+        DATABASE_PORT: Joi.number().required(),
+      })
+    }),
+  ],
+  controllers: [AppController],
+  providers: [AppService],
 })
-export class AppModule {}
+export class AppModule { }
