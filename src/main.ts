@@ -8,10 +8,9 @@ async function bootstrap() {
   app.useGlobalPipes(
     new ValidationPipe({
       whitelist: true,
-      forbidNonWhitelisted: true,// discard data that is not define in dtos
-
+      forbidNonWhitelisted: true, // discard data that is not define in dtos
     }),
-  );// to activate the validator inthe dtos
+  ); // to activate the validator inthe dtos
 
   const config = new DocumentBuilder()
     .setTitle('API')

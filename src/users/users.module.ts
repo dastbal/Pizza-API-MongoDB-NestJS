@@ -8,6 +8,6 @@ import { PizzasModule } from 'src/pizzas/pizzas.module';
 @Module({
   imports: [PizzasModule],
   controllers: [UsersController, CustomersController],
-  providers: [UsersService, CustomersService]
+  providers: [UsersService, CustomersService],
 })
-export class UsersModule { }
+export class UsersModule {}
