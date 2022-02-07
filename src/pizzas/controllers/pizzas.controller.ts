@@ -13,11 +13,14 @@ import {
 } from '@nestjs/common';
 import { PizzasService } from 'src/pizzas/services/pizzas.service';
 import { CreatePizzaDto, UpdatePizzaDto } from 'src/pizzas/dtos/pizzas.dto';
+import { ApiTags, ApiOperation } from '@nestjs/swagger';
 
+@ApiTags('Pizzas')
 @Controller('pizzas')
 export class PizzasController {
     constructor(private pizzasService: PizzasService) { }
     @Get(':pizzaId')
+    @ApiOperation({ summary: 'get a pizza by id' })
     getPizza(@Param('pizzaId', ParseIntPipe) pizzaId: number) {
         return this.pizzasService.findOne(pizzaId);
     }
