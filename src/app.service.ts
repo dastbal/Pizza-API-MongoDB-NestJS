@@ -10,8 +10,8 @@ export class AppService {
   // };
   constructor(
     @Inject(config.KEY) private configService: ConfigType<typeof config>,
-  ) {}
+  ) { }
   getHello(): string {
-    return `${this.configService.apiKey} name ${this.configService.database.name}`;
+    return `${process.env.API_KEY || this.configService.apiKey} name ${process.env.DATABASE_NAME || this.configService.database.name}`;
   }
 }
