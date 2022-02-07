@@ -12,6 +12,7 @@ export class AppService {
     @Inject(config.KEY) private configService: ConfigType<typeof config>,
   ) { }
   getHello(): string {
-    return 'HELLO';
+    return `Hello ->
+    ${this.configService.database.name}`;
   }
 }
