@@ -18,10 +18,10 @@ import { ApiTags, ApiOperation } from '@nestjs/swagger';
 @ApiTags('Pizzas')
 @Controller('pizzas')
 export class PizzasController {
-  constructor(private pizzasService: PizzasService) {}
+  constructor(private pizzasService: PizzasService) { }
   @Get(':pizzaId')
   @ApiOperation({ summary: 'get a pizza by id' })
-  getPizza(@Param('pizzaId', ParseIntPipe) pizzaId: number) {
+  getPizza(@Param('pizzaId') pizzaId: string) {
     return this.pizzasService.findOne(pizzaId);
   }
 
@@ -34,20 +34,20 @@ export class PizzasController {
     return this.pizzasService.findAll();
   }
 
-  @Post()
-  @HttpCode(HttpStatus.ACCEPTED)
-  create(@Body() payload: CreatePizzaDto) {
-    return this.pizzasService.create(payload);
-  }
-  @Put(':pizzaId')
-  update(
-    @Param('pizzaId', ParseIntPipe) pizzaId: number,
-    @Body() payload: UpdatePizzaDto,
-  ) {
-    return this.pizzasService.update(pizzaId, payload);
-  }
-  @Delete(':pizzaId')
-  delete(@Param('pizzaId', ParseIntPipe) pizzaId: number) {
-    return this.pizzasService.delete(pizzaId);
-  }
+  // @Post()
+  // @HttpCode(HttpStatus.ACCEPTED)
+  // create(@Body() payload: CreatePizzaDto) {
+  //   return this.pizzasService.create(payload);
+  // }
+  // @Put(':pizzaId')
+  // update(
+  //   @Param('pizzaId', ParseIntPipe) pizzaId: number,
+  //   @Body() payload: UpdatePizzaDto,
+  // ) {
+  //   return this.pizzasService.update(pizzaId, payload);
+  // }
+  // @Delete(':pizzaId')
+  // delete(@Param('pizzaId', ParseIntPipe) pizzaId: number) {
+  //   return this.pizzasService.delete(pizzaId);
+  // }
 }
