@@ -10,9 +10,6 @@ import { DatabseModule } from './databse/databse.module';
 import { enviroments } from './enviroments';
 import config from './config';
 
-
-
-
 @Module({
   imports: [
     UsersModule,
@@ -32,4 +29,4 @@ import config from './config';
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule { }
+export class AppModule {}

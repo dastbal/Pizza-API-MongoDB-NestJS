@@ -1,10 +1,13 @@
 import { Injectable, NotFoundException, Inject } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
-
+import { Model, FilterQuery } from 'mongoose';
 
 import { User } from '../entities/user.entity';
-import { CreateUserDto, UpdateUserDto } from 'src/users/dtos/users.dto';
+import {
+  CreateUserDto,
+  UpdateUserDto,
+  FilterUserDto,
+} from 'src/users/dtos/users.dto';
 import { Order } from '../entities/order.entity';
 
 import { PizzasService } from 'src/pizzas/services/pizzas.service';
@@ -14,9 +17,9 @@ export class UsersService {
   constructor(
     private pizzaService: PizzasService,
     @InjectModel(User.name) private userModel: Model<User>,
-    //@Inject('API_KEY') private apiKey: string,
-    //private configService: ConfigService,
-  ) { }
+  ) //@Inject('API_KEY') private apiKey: string,
+  //private configService: ConfigService,
+  {}
   // private counterUserId: number = 1;
   // private users: User[] = [
   //   {
@@ -28,7 +31,12 @@ export class UsersService {
   //   },
   // ];
 
-  async findAll() {
+  async findAll(params?: FilterUserDto) {
+    if (params) {
+      const { limit, offset } = params;
+
+      return this.userModel.find().skip(offset).limit(limit).exec();
+    }
     return this.userModel.find().exec();
   }
   async findOne(id: string) {
@@ -39,33 +47,23 @@ export class UsersService {
     return user;
   }
 
-  // create(payload: CreateUserDto) {
-  //   this.counterUserId++;
-  //   const newUser: User = {
-  //     id: this.counterUserId,
-  //     ...payload,
-  //   };
-  //   this.users.push(newUser);
-  //   return newUser;
-  // }
-  // update(id: number, payload: UpdateUserDto) {
-  //   const user: User = this.findOne(id);
-  //   const index: number = this.users.findIndex((user) => user.id === id);
-  //   this.users[index] = {
-  //     ...user,
-  //     ...payload,
-  //   };
-  //   return this.users[index];
-  // }
-  // delete(id: number) {
-  //   const user: User = this.users.find((item) => item.id === id);
-  //   if (!user) {
-  //     throw new NotFoundException(`User ${id} not Found`);
-  //   }
-  //   this.users = this.users.filter((user) => user.id != id);
+  create(payload: CreateUserDto) {
+    const newUser = new this.userModel(payload);
+    return newUser.save();
+  }
+  update(id: string, payload: UpdateUserDto) {
+    const user = this.userModel
+      .findByIdAndUpdate(id, { $set: payload }, { new: true })
+      .exec();
+    if (!user) {
+      throw new NotFoundException(`user #${id} not Found`);
+    }
 
-  //   return this.users;
-  // }
+    return user;
+  }
+  delete(id: string) {
+    return this.userModel.findByIdAndDelete(id);
+  }
   async getOrderByUser(id: string) {
     const user = await this.findOne(id);
     return {

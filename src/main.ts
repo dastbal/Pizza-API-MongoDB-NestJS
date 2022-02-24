@@ -9,6 +9,9 @@ async function bootstrap() {
     new ValidationPipe({
       whitelist: true,
       forbidNonWhitelisted: true, // discard data that is not define in dtos
+      transformOptions: {
+        enableImplicitConversion: true,
+      },
     }),
   ); // to activate the validator inthe dtos
 

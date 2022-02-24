@@ -1,61 +1,77 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException, Inject } from '@nestjs/common';
+import { InjectModel } from '@nestjs/mongoose';
+import { Model, FilterQuery } from 'mongoose';
+
 import { Customer } from '../entities/customer.entity';
 import {
   CreateCustomerDto,
   UpdateCustomerDto,
+  FilterCustomerDto,
 } from 'src/users/dtos/customers.dto';
+import { Order } from '../entities/order.entity';
+
+import { PizzasService } from 'src/pizzas/services/pizzas.service';
 
 @Injectable()
 export class CustomersService {
-  private counterCustomerId: number = 1;
-  private customers: Customer[] = [
-    {
-      id: 1,
-      firstName: 'Super',
-      lastName: 'Balladares',
-      email: 'david@gmail.com',
-      password: 'Delicouspizza',
-    },
-  ];
+  constructor(
+    private pizzaService: PizzasService,
+    @InjectModel(Customer.name) private CustomerModel: Model<Customer>,
+  ) //@Inject('API_KEY') private apiKey: string,
+  //private configService: ConfigService,
+  {}
+  // private counterCustomerId: number = 1;
+  // private Customers: Customer[] = [
+  //   {
+  //     id: 1,
+  //     firstName: 'David',
+  //     lastName: 'Balladares',
+  //     email: 'david@gmail.com',
+  //     password: 'Delicouspizza',
+  //   },
+  // ];
 
-  findAll() {
-    return this.customers;
+  async findAll(params?: FilterCustomerDto) {
+    if (params) {
+      const { limit, offset } = params;
+
+      return this.CustomerModel.find().skip(offset).limit(limit).exec();
+    }
+    return this.CustomerModel.find().exec();
   }
-  findOne(id: number) {
-    const customer: Customer = this.customers.find((item) => item.id === id);
-    if (!customer) {
+  async findOne(id: string) {
+    const Customer = await this.CustomerModel.findById(id).exec();
+    if (!Customer) {
       throw new NotFoundException(`Customer ${id} not Found`);
     }
-    return customer;
+    return Customer;
   }
 
   create(payload: CreateCustomerDto) {
-    this.counterCustomerId++;
-    const newCustomer: Customer = {
-      id: this.counterCustomerId,
-      ...payload,
-    };
-    this.customers.push(newCustomer);
-    return newCustomer;
+    const newCustomer = new this.CustomerModel(payload);
+    return newCustomer.save();
   }
-  update(id: number, payload: UpdateCustomerDto) {
-    const customer: Customer = this.findOne(id);
-    const index: number = this.customers.findIndex(
-      (customer) => customer.id === id,
-    );
-    this.customers[index] = {
-      ...customer,
-      ...payload,
-    };
-    return this.customers[index];
-  }
-  delete(id: number) {
-    const customer: Customer = this.customers.find((item) => item.id === id);
-    if (!customer) {
-      throw new NotFoundException(`Customer ${id} not Found`);
+  update(id: string, payload: UpdateCustomerDto) {
+    const Customer = this.CustomerModel.findByIdAndUpdate(
+      id,
+      { $set: payload },
+      { new: true },
+    ).exec();
+    if (!Customer) {
+      throw new NotFoundException(`Customer #${id} not Found`);
     }
-    this.customers = this.customers.filter((customer) => customer.id != id);
 
-    return this.customers;
+    return Customer;
+  }
+  delete(id: string) {
+    return this.CustomerModel.findByIdAndDelete(id);
+  }
+  async getOrderByCustomer(id: string) {
+    const Customer = await this.findOne(id);
+    return {
+      date: new Date(),
+      Customer,
+      pizzas: await this.pizzaService.findAll(),
+    };
   }
 }

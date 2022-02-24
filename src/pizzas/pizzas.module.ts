@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 import { PizzasController } from './controllers/pizzas.controller';
 import { PizzasService } from './services/pizzas.service';
-import { Pizza, PizzaSchema } from 'src/pizzas/entities/pizza.entity'
+import { Pizza, PizzaSchema } from 'src/pizzas/entities/pizza.entity';
 
 @Module({
   imports: [
@@ -10,7 +10,6 @@ import { Pizza, PizzaSchema } from 'src/pizzas/entities/pizza.entity'
       {
         name: Pizza.name,
         schema: PizzaSchema,
-
       },
     ]),
   ],
@@ -18,4 +17,4 @@ import { Pizza, PizzaSchema } from 'src/pizzas/entities/pizza.entity'
   providers: [PizzasService],
   exports: [PizzasService],
 })
-export class PizzasModule { }
+export class PizzasModule {}

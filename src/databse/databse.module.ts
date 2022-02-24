@@ -5,22 +5,14 @@ import { MongoClient } from 'mongodb';
 const API_KEY = '1234';
 const API_KEY_PROD = 'PROD1234';
 
-import config from '../config'
-
-
-
+import config from '../config';
 
 @Global()
 @Module({
   imports: [
     MongooseModule.forRootAsync({
       useFactory: async (configService: ConfigType<typeof config>) => {
-        const {
-          user,
-          password,
-          dbName,
-          host
-        } = configService.mongo;
+        const { user, password, dbName, host } = configService.mongo;
         return {
           uri: `mongodb+srv://${user}:${password}@${host}.mongodb.net/`,
           dbName,
@@ -37,25 +29,16 @@ import config from '../config'
     {
       provide: 'MONGO',
       useFactory: async (configService: ConfigType<typeof config>) => {
-        const {
-          user,
-          password,
-          dbName,
-          host
-        } = configService.mongo;
+        const { user, password, dbName, host } = configService.mongo;
         const uri = `mongodb+srv://${user}:${password}@${host}.mongodb.net/`;
         const client = new MongoClient(uri);
         await client.connect();
         const database = client.db(dbName);
         return database;
-
       },
       inject: [config.KEY],
-
-
-    }
+    },
   ],
   exports: ['API_KEY', 'MONGO', MongooseModule],
-
 })
-export class DatabseModule { }
+export class DatabseModule {}

@@ -1,8 +1,18 @@
-import { Pizza } from 'src/pizzas/entities/pizza.entity';
-import { User } from './user.entity';
+import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
+import { Document, Types } from 'mongoose';
 
-export class Order {
+import { Customer } from './customer.entity';
+import { Pizza } from 'src/pizzas/entities/pizza.entity';
+
+@Schema()
+export class Order extends Document {
+  @Prop({ type: Date })
   date: Date;
-  user: User;
-  pizzas: Pizza[];
+
+  @Prop({ type: Types.ObjectId, ref: Customer.name, required: true })
+  customer: Customer | Types.ObjectId;
+
+  @Prop({ type: [{ type: Types.ObjectId, ref: Pizza.name }] })
+  pizzas: Types.Array<Pizza>;
 }
+export const OrderSchema = SchemaFactory.createForClass(Order);

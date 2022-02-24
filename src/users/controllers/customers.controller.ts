@@ -9,30 +9,28 @@ import {
   Param,
   Post,
   Body,
-  ParseIntPipe,
 } from '@nestjs/common';
 import { CustomersService } from 'src/users/services/customers.service';
 import {
   CreateCustomerDto,
   UpdateCustomerDto,
+  FilterCustomerDto,
 } from 'src/users/dtos/customers.dto';
 import { ApiTags } from '@nestjs/swagger';
+import { MongoIdPipe } from 'src/common/mongo-id.pipe';
 
 @ApiTags('Customers')
 @Controller('customers')
 export class CustomersController {
   constructor(private customerService: CustomersService) {}
   @Get(':customerId')
-  getPizza(@Param('customerId', ParseIntPipe) customerId: number) {
+  getCustomer(@Param('customerId', MongoIdPipe) customerId: string) {
     return this.customerService.findOne(customerId);
   }
 
   @Get()
-  getPizzas(
-    @Query('limit') limit: number = 10,
-    @Query('offset') offset: number = 0,
-  ) {
-    return this.customerService.findAll();
+  getCustomers(@Query() params: FilterCustomerDto) {
+    return this.customerService.findAll(params);
   }
 
   @Post()
@@ -42,13 +40,13 @@ export class CustomersController {
   }
   @Put(':customerId')
   update(
-    @Param('customerId', ParseIntPipe) customerId: number,
+    @Param('customerId', MongoIdPipe) customerId: string,
     @Body() payload: UpdateCustomerDto,
   ) {
     return this.customerService.update(customerId, payload);
   }
   @Delete(':customerId')
-  delete(@Param('customerId', ParseIntPipe) customerId: number) {
+  delete(@Param('customerId', MongoIdPipe) customerId: string) {
     return this.customerService.delete(customerId);
   }
 }

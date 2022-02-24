@@ -1,6 +1,8 @@
 # compiled output
 /dist
 /node_modules
+*.env
+Insomnia.Core-2021.7.2.exe
 
 # Logs
 logs
@@ -10,7 +12,7 @@ pnpm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 lerna-debug.log*
-*.env
+.exe
 # OS
 .DS_Store
 

@@ -12,15 +12,20 @@ import {
   ParseIntPipe,
 } from '@nestjs/common';
 import { UsersService } from 'src/users/services/users.service';
-import { CreateUserDto, UpdateUserDto } from 'src/users/dtos/users.dto';
+import {
+  CreateUserDto,
+  FilterUserDto,
+  UpdateUserDto,
+} from 'src/users/dtos/users.dto';
 import { ApiTags } from '@nestjs/swagger';
+import { MongoIdPipe } from 'src/common/mongo-id.pipe';
 
 @ApiTags('Users')
 @Controller('users')
 export class UsersController {
-  constructor(private userService: UsersService) { }
+  constructor(private userService: UsersService) {}
   @Get(':userId')
-  getOrder(@Param('userId') userId: string) {
+  getUser(@Param('userId', MongoIdPipe) userId: string) {
     return this.userService.findOne(userId);
   }
   @Get(':userId/orders')
@@ -29,27 +34,24 @@ export class UsersController {
   }
 
   @Get()
-  getOrders(
-    @Query('limit') limit: number = 10,
-    @Query('offset') offset: number = 0,
-  ) {
-    return this.userService.findAll();
+  getOrders(@Query() params: FilterUserDto) {
+    return this.userService.findAll(params);
   }
 
-  // @Post()
-  // @HttpCode(HttpStatus.ACCEPTED)
-  // create(@Body() payload: CreateUserDto) {
-  //   return this.userService.create(payload);
-  // }
-  // @Put(':userId')
-  // update(
-  //   @Param('userId', ParseIntPipe) userId: number,
-  //   @Body() payload: UpdateUserDto,
-  // ) {
-  //   return this.userService.update(userId, payload);
-  // }
-  // @Delete(':userId')
-  // delete(@Param('userId', ParseIntPipe) userId: number) {
-  //   return this.userService.delete(userId);
-  // }
+  @Post()
+  @HttpCode(HttpStatus.ACCEPTED)
+  create(@Body() payload: CreateUserDto) {
+    return this.userService.create(payload);
+  }
+  @Put(':userId')
+  update(
+    @Param('userId', MongoIdPipe) userId: string,
+    @Body() payload: UpdateUserDto,
+  ) {
+    return this.userService.update(userId, payload);
+  }
+  @Delete(':userId')
+  delete(@Param('userId', MongoIdPipe) userId: string) {
+    return this.userService.delete(userId);
+  }
 }

@@ -12,7 +12,6 @@ export default registerAs('config', () => {
       dbName: process.env.MONGO_DB,
       host: process.env.MONGO_HOST,
       connection: process.env.MONGO_CONNECTION,
-
     },
     apiKey: process.env.API_KEY,
   };

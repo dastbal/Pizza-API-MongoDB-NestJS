@@ -7,8 +7,11 @@ import { CustomersService } from './services/customers.service';
 import { CustomersController } from './controllers/customers.controller';
 import { PizzasModule } from 'src/pizzas/pizzas.module';
 
-import { User, UserSchema } from 'src/users/entities/user.entity'
-
+import { User, UserSchema } from 'src/users/entities/user.entity';
+import { Order, OrderSchema } from 'src/users/entities/order.entity';
+import { Customer, CustomerSchema } from 'src/users/entities/customer.entity';
+import { OrdersService } from './services/orders.service';
+import { OrdersController } from './controllers/orders.controller';
 
 @Module({
   imports: [
@@ -17,10 +20,18 @@ import { User, UserSchema } from 'src/users/entities/user.entity'
         name: User.name,
         schema: UserSchema,
       },
-    ])
-    ,
-    PizzasModule],
-  controllers: [UsersController, CustomersController],
-  providers: [UsersService, CustomersService],
+      {
+        name: Order.name,
+        schema: OrderSchema,
+      },
+      {
+        name: Customer.name,
+        schema: CustomerSchema,
+      },
+    ]),
+    PizzasModule,
+  ],
+  controllers: [UsersController, CustomersController, OrdersController],
+  providers: [UsersService, CustomersService, OrdersService],
 })
-export class UsersModule { }
+export class UsersModule {}
