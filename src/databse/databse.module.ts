@@ -12,9 +12,9 @@ import config from '../config';
   imports: [
     MongooseModule.forRootAsync({
       useFactory: async (configService: ConfigType<typeof config>) => {
-        const { user, password, dbName, host } = configService.mongo;
+        const { user, password, dbName, host , connection } = configService.mongo;
         return {
-          uri: `mongodb+srv://${user}:${password}@${host}.mongodb.net/`,
+          uri: `${connection}://${user}:${password}@${host}.mongodb.net/`,
           dbName,
         };
       },
