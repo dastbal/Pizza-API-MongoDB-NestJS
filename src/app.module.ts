@@ -8,6 +8,7 @@ import { UsersModule } from './users/users.module';
 import { PizzasModule } from './pizzas/pizzas.module';
 import { DatabseModule } from './databse/databse.module';
 import { enviroments } from './enviroments';
+import { AuthModule } from './auth/auth.module';
 import config from './config';
 
 @Module({
@@ -20,11 +21,13 @@ import config from './config';
       load: [config],
       isGlobal: true,
       validationSchema: Joi.object({
-        API_KEY: Joi.number().required(),
+        API_KEY: Joi.string().required(),
         DATABASE_NAME: Joi.string().required(),
         DATABASE_PASSWORD: Joi.string().required(),
+        JWT_SECRET: Joi.string().required(),
       }),
     }),
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService],

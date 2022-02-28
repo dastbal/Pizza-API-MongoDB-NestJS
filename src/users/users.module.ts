@@ -22,7 +22,7 @@ import { OrdersController } from './controllers/orders.controller';
       },
       {
         name: Order.name,
-        schema: OrderSchema,
+        schema: OrderSchema, 
       },
       {
         name: Customer.name,
@@ -33,5 +33,6 @@ import { OrdersController } from './controllers/orders.controller';
   ],
   controllers: [UsersController, CustomersController, OrdersController],
   providers: [UsersService, CustomersService, OrdersService],
+  exports: [UsersService],
 })
 export class UsersModule {}
