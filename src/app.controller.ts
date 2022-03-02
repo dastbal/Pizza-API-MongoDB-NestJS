@@ -7,6 +7,8 @@ import { ApiKeyGuard } from './auth/guards/api-key.guard';
 @Controller()
 export class AppController {
   constructor(private readonly appService: AppService) {}
+
+  @Public()
   @Get('/')
   //@SetMetadata('isPublic', true)  without own decorator
   home() {

@@ -19,12 +19,7 @@ export class PizzasService {
       if (minPrice && maxPrice) {
         filters.price = { $gte: minPrice, $lte: maxPrice };
       }
-      return this.pizzaModel
-        .find(filters)
-        .populate('created')
-        .skip(offset)
-        .limit(limit)
-        .exec();
+      return this.pizzaModel.find(filters).skip(offset).limit(limit).exec();
     }
     return this.pizzaModel.find().populate('created').exec();
   }
