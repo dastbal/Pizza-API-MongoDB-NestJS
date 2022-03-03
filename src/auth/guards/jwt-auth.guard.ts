@@ -5,7 +5,7 @@ import { Reflector } from '@nestjs/core';
 import { IS_PUBLIC_KEY } from 'src/auth/decorators/public.decorator';
 
 @Injectable()
-export class JwtAuthGuard  extends AuthGuard('jwt') {
+export class JwtAuthGuard extends AuthGuard('jwt') {
   constructor(private reflector: Reflector) {
     super();
   }
@@ -20,3 +20,4 @@ export class JwtAuthGuard  extends AuthGuard('jwt') {
     return super.canActivate(context);
   }
 }
+

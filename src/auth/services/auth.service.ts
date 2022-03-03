@@ -21,11 +21,13 @@ export class AuthService {
     }
     return null;
   }
-  async generateJWT(user: User) {
-    const payload: PayloadToken = { sub: user.id };
+  generateJWT(user: User) {
+    const payload: PayloadToken = { sub: user._id, role: user.role };
+
     return {
       access_token: this.jwtService.sign(payload),
       user,
     };
   }
 }
+
